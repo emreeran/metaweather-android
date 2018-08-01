@@ -37,6 +37,9 @@ dependencies {
     implementation deps.support.design
     implementation deps.constraint_layout
 
+    // Google Play services
+    implementation deps.play.location
+
     // Room
     implementation deps.room.runtime
     implementation deps.room.rxjava2
@@ -66,6 +69,12 @@ dependencies {
 
     // Timber
     implementation deps.timber
+
+    // RxPermissions
+    implementation deps.rxpermissions
+
+    // RxLocation
+    implementation deps.rxlocation
 
     // Annotation processors
     // Room

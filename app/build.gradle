@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs"
+
+android {
+    compileSdkVersion build_versions.target_sdk
+    buildToolsVersion build_versions.build_tools
+    defaultConfig {
+        applicationId "com.emreeran.weather"
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    // Kotlin
+    implementation deps.kotlin.stdlib
+
+    // Android support
+    implementation deps.support.app_compat
+    implementation deps.support.recyclerview
+    implementation deps.support.design
+    implementation deps.constraint_layout
+
+    // Room
+    implementation deps.room.runtime
+    implementation deps.room.rxjava2
+
+    // Lifecycle
+    implementation deps.lifecycle.runtime
+    implementation deps.lifecycle.extensions
+    implementation deps.lifecycle.java8
+
+    // Dagger
+    implementation deps.dagger.runtime
+    implementation deps.dagger.android
+    implementation deps.dagger.android_support
+
+    // Retrofit
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.gson
+    implementation deps.retrofit.rx_java
+
+    // RxJava2
+    implementation deps.rx_java2.rx_java
+    implementation deps.rx_java2.rx_android
+
+    // Timber
+    implementation deps.timber
+
+    // Annotation processors
+    // Room
+    kapt deps.room.compiler
+
+    // Lifecycle
+    kapt deps.lifecycle.compiler
+
+    // Dagger
+    kapt deps.dagger.compiler
+    kapt deps.dagger.android_support_compiler
+
+    // Testing
+    testImplementation deps.junit
+    androidTestImplementation deps.support.test_runner
+    androidTestImplementation deps.support.espresso_core
+}

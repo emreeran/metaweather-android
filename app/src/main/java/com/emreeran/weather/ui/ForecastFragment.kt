@@ -9,12 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.emreeran.weather.R
+import com.emreeran.weather.databinding.ForecastFragmentBinding
 import com.emreeran.weather.di.Injectable
+import com.emreeran.weather.util.autoCleared
 import com.google.android.gms.location.LocationRequest
 import com.patloew.rxlocation.RxLocation
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -32,10 +35,16 @@ class ForecastFragment : Fragment(), Injectable {
 
     lateinit var forecastViewModel: ForecastViewModel
 
+    var binding by autoCleared<ForecastFragmentBinding>()
+
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(R.layout.forecast_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = DataBindingUtil
+                .inflate(inflater, R.layout.forecast_fragment, container, false)
+        return binding.root
+    }
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -44,9 +53,7 @@ class ForecastFragment : Fragment(), Injectable {
 
         val location = forecastViewModel.location
         location.observe(this, Observer {
-            Timber.i("Observer changed: $it")
-            val locationUpdate = it?.data
-            Timber.i("Got location $locationUpdate")
+            binding.location = it?.data
         })
 
         context?.let {

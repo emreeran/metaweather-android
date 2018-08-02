@@ -19,7 +19,8 @@ data class LocationSearchResponse(
         val latLong: Coordinates,
         @SerializedName("woeid")
         val woeId: Int,
-        val distance: Int?
+        val distance: Int?,
+        val parent: LocationSearchResponse?
 )
 
 data class Coordinates(
@@ -45,11 +46,13 @@ data class Coordinates(
     }
 }
 
-enum class LocationType {
-    CITY,
-    REGION_STATE_PROVINCE,
-    COUNTRY,
-    CONTINENT
+enum class LocationType(name: String) {
+    CITY("City"),
+    REGION_STATE_PROVINCE("Region / State / Province"),
+    COUNTRY("Country"),
+    CONTINENT("Continent");
+
+    val typeName: String = name
 }
 
 class LocationTypeDeserializer : JsonDeserializer<LocationType> {

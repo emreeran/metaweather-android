@@ -1,7 +1,9 @@
 package com.emreeran.weather.api
 
+import androidx.lifecycle.LiveData
+import com.emreeran.weather.api.vo.ApiResponse
 import com.emreeran.weather.api.vo.LocationSearchResponse
-import io.reactivex.Single
+import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -10,8 +12,8 @@ import retrofit2.http.Query
  */
 interface MetaWeatherService {
     @GET("api/location/search/")
-    fun searchLocationByNameAsSingle(@Query("query") query: String): Single<List<LocationSearchResponse>>
+    fun searchLocationByName(@Query("query") query: String): Call<List<LocationSearchResponse>>
 
     @GET("api/location/search/")
-    fun searchLocationByCoordinatesAsSingle(@Query("lattlong") latLong: String): Single<List<LocationSearchResponse>>
+    fun searchLocationByCoordinates(@Query("lattlong") latLong: String): LiveData<ApiResponse<List<LocationSearchResponse>>>
 }

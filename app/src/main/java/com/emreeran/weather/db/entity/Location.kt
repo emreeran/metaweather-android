@@ -3,6 +3,8 @@ package com.emreeran.weather.db.entity
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.emreeran.weather.api.vo.Coordinates
+import com.emreeran.weather.api.vo.LocationType
 import java.util.*
 
 /**
@@ -11,24 +13,11 @@ import java.util.*
 @Entity(tableName = "locations")
 data class Location(
         @PrimaryKey val woeId: Int,
-        @ForeignKey(entity = Location::class, parentColumns = ["woeId"], childColumns = ["parentId"]) val parentId: Int?,
+        @ForeignKey(entity = Location::class, parentColumns = ["woeId"], childColumns = ["parentId"]) val parentId: Int? = null,
         val name: String,
         val type: LocationType,
-        val coordinates: LocationCoordinates,
-        val timeZone: TimeZone?,
-        val createdAt: Date
+        val coordinates: Coordinates,
+        val distance: Int? = null,
+        val timeZone: TimeZone? = null,
+        val createdAt: Date = Date()
 )
-
-data class LocationCoordinates(
-        val latitude: Double,
-        val longitude: Double
-)
-
-enum class LocationType(name: String) {
-    CITY("City"),
-    REGION_STATE_PROVINCE("Region / State / Province"),
-    COUNTRY("Country"),
-    CONTINENT("Continent");
-
-    val typeName: String = name
-}

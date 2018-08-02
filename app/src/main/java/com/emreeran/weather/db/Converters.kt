@@ -1,8 +1,8 @@
 package com.emreeran.weather.db
 
 import androidx.room.TypeConverter
-import com.emreeran.weather.db.entity.LocationCoordinates
-import com.emreeran.weather.db.entity.LocationType
+import com.emreeran.weather.api.vo.Coordinates
+import com.emreeran.weather.api.vo.LocationType
 import timber.log.Timber
 import java.util.*
 
@@ -20,17 +20,17 @@ class Converters {
     fun toTimeZone(id: String?): TimeZone? = id?.let { TimeZone.getTimeZone(it) }
 
     @TypeConverter
-    fun timeZoneToString(timeZone: TimeZone): String? = timeZone.id
+    fun timeZoneToString(timeZone: TimeZone?): String? = timeZone?.id
 
     @TypeConverter
-    fun toLocationCoordinates(value: String?): LocationCoordinates? {
+    fun toCoordinates(value: String?): Coordinates? {
         value?.let {
             val latLong = it.split(",")
             if (latLong.size == 2) {
                 try {
                     val latitude = latLong[0].toDouble()
                     val longitude = latLong[1].toDouble()
-                    return LocationCoordinates(latitude, longitude)
+                    return Coordinates(latitude, longitude)
                 } catch (e: NumberFormatException) {
                     Timber.e(e, "Could not parse location coordinates.")
                 }
@@ -40,7 +40,7 @@ class Converters {
     }
 
     @TypeConverter
-    fun locationCoordinatesToString(locationCoordinates: LocationCoordinates?): String? =
+    fun coordinatesToString(locationCoordinates: Coordinates?): String? =
             locationCoordinates?.let {
                 "${it.latitude},${it.longitude}"
             }

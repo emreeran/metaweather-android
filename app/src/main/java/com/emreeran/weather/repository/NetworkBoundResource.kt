@@ -15,7 +15,7 @@ import com.emreeran.weather.vo.Resource
  * Created by Emre Eran on 2.08.2018.
  */
 abstract class NetworkBoundResource<ResultType, RequestType>
-@MainThread constructor(private val appExecutors: AppExecutors){
+@MainThread constructor(private val appExecutors: AppExecutors) {
     private val result = MediatorLiveData<Resource<ResultType>>()
 
     init {

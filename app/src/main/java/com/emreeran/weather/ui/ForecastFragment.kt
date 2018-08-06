@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.emreeran.weather.R
 import com.emreeran.weather.databinding.ForecastFragmentBinding
+import com.emreeran.weather.db.entity.ForecastDay
 import com.emreeran.weather.di.Injectable
 import com.emreeran.weather.util.autoCleared
 import com.google.android.gms.location.LocationRequest
@@ -23,6 +25,8 @@ import com.patloew.rxlocation.RxLocation
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -51,9 +55,22 @@ class ForecastFragment : Fragment(), Injectable {
         forecastViewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(ForecastViewModel::class.java)
 
+        binding.hourDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+
         val location = forecastViewModel.location
+        val forecast = forecastViewModel.forecast
+
         location.observe(this, Observer {
             binding.location = it?.data
+        })
+
+
+        forecast.observe(this, Observer {
+            Timber.i("Forecast: ${it?.data}")
+            it?.data?.let {
+                binding.forecast = it.forecast
+                setTodayForecast(it.days)
+            }
         })
 
         context?.let {
@@ -91,8 +108,15 @@ class ForecastFragment : Fragment(), Injectable {
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         disposables.add(rxLocation.location().updates(locationRequest)
                 .subscribe { location ->
-                    Timber.i("Long: ${location.longitude} Lat: ${location.latitude}")
                     forecastViewModel.setUserCoordinates(location.latitude, location.longitude)
                 })
+    }
+
+    private fun setTodayForecast(forecastDays: List<ForecastDay>) {
+        for (item in forecastDays) {
+            if (DateUtils.isToday(item.date.time)) {
+                binding.today = item
+            }
+        }
     }
 }

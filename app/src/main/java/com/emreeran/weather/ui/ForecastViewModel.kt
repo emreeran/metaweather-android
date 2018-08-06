@@ -5,15 +5,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.emreeran.weather.db.entity.Location
+import com.emreeran.weather.repository.ForecastRepository
 import com.emreeran.weather.repository.LocationRepository
 import com.emreeran.weather.util.AbsentLiveData
+import com.emreeran.weather.vo.ForecastWithItems
 import com.emreeran.weather.vo.Resource
 import javax.inject.Inject
 
 /**
  * Created by Emre Eran on 3.08.2018.
  */
-class ForecastViewModel @Inject constructor(locationRepository: LocationRepository) : ViewModel() {
+class ForecastViewModel @Inject constructor(
+        locationRepository: LocationRepository,
+        forecastRepository: ForecastRepository
+) : ViewModel() {
 
     private val userCoordinates: MutableLiveData<UserCoordinates> = MutableLiveData()
 
@@ -21,6 +26,13 @@ class ForecastViewModel @Inject constructor(locationRepository: LocationReposito
             .switchMap(userCoordinates) {
                 it.ifExists { lat, long ->
                     locationRepository.findNearestLocationByCoordinates(lat, long)
+                }
+            }
+
+    val forecast: LiveData<Resource<ForecastWithItems>> = Transformations
+            .switchMap(location) {
+                it.data?.let {
+                    forecastRepository.getForecastByLocationId(it.woeId)
                 }
             }
 

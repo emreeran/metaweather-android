@@ -65,6 +65,7 @@ dependencies {
     implementation deps.retrofit.runtime
     implementation deps.retrofit.gson
     implementation deps.retrofit.rx_java
+    implementation deps.okhttp_logging_interceptor
 
     // RxJava2
     implementation deps.rx_java2.rx_java

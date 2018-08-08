@@ -9,20 +9,25 @@ import java.util.*
 /**
  * Created by Emre Eran on 2.08.2018.
  */
-class Converters {
+object Converters {
     @TypeConverter
+    @JvmStatic
     fun toDate(value: Long?): Date? = value?.let { Date(it) }
 
     @TypeConverter
+    @JvmStatic
     fun dateToLong(date: Date?): Long? = date?.time
 
     @TypeConverter
+    @JvmStatic
     fun toTimeZone(id: String?): TimeZone? = id?.let { TimeZone.getTimeZone(it) }
 
     @TypeConverter
+    @JvmStatic
     fun timeZoneToString(timeZone: TimeZone?): String? = timeZone?.id
 
     @TypeConverter
+    @JvmStatic
     fun toCoordinates(value: String?): Coordinates? {
         value?.let {
             val latLong = it.split(",")
@@ -40,12 +45,14 @@ class Converters {
     }
 
     @TypeConverter
+    @JvmStatic
     fun coordinatesToString(locationCoordinates: Coordinates?): String? =
             locationCoordinates?.let {
                 "${it.latitude},${it.longitude}"
             }
 
     @TypeConverter
+    @JvmStatic
     fun toLocationType(value: String?): LocationType? {
         value?.let {
             return when (it) {
@@ -60,6 +67,27 @@ class Converters {
     }
 
     @TypeConverter
+    @JvmStatic
     fun locationTypeToString(locationType: LocationType?): String? = locationType?.typeName
 
+    @TypeConverter
+    @JvmStatic
+    fun stringToIntList(data: String?): List<Int>? {
+        return data?.let {
+            it.split(",").map {
+                try {
+                    it.toInt()
+                } catch (ex: NumberFormatException) {
+                    Timber.e(ex, "Cannot convert $it to number")
+                    null
+                }
+            }
+        }?.filterNotNull()
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun intListToString(ints: List<Int>?): String? {
+        return ints?.joinToString(",")
+    }
 }

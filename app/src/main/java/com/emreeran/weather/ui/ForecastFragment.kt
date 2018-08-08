@@ -56,6 +56,8 @@ class ForecastFragment : Fragment(), Injectable {
                 .get(ForecastViewModel::class.java)
 
         binding.hourDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        binding.dayDateFormat = SimpleDateFormat("EEEE", Locale.getDefault())
+        binding.fullDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
         val location = forecastViewModel.location
         val forecast = forecastViewModel.forecast

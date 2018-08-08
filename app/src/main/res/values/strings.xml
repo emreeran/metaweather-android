@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">Weather</string>
     <string name="temp">%s°</string>
+    <string name="humidity">%s%%</string>
+    <string name="visibility">%s mi</string>
+    <string name="pressure">%s mbar</string>
+    <string name="wind">%s %s mph</string>
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
-    <string name="humidity">Humidity</string>
-    <string name="pressure">Pressure</string>
-    <string name="wind_speed">Wind Speed</string>
-    <string name="wind_direction">Wind Direction</string>
-    <string name="visibility">Visibility</string>
+    <string name="humidity_title">Humidity</string>
+    <string name="pressure_title">Pressure</string>
+    <string name="wind_title">Wind</string>
+    <string name="visibility_title">Visibility</string>
     <string name="min_temp">Min Temp</string>
     <string name="max_temp">Max Temp</string>
 </resources>

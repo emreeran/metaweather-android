@@ -8,6 +8,7 @@ import com.emreeran.weather.db.dao.LocationDao
 import com.emreeran.weather.db.entity.Forecast
 import com.emreeran.weather.db.entity.ForecastDay
 import com.emreeran.weather.db.entity.Location
+import com.emreeran.weather.db.entity.LocationQuery
 
 /**
  * Created by Emre Eran on 2.08.2018.
@@ -16,7 +17,8 @@ import com.emreeran.weather.db.entity.Location
         entities = [
             Location::class,
             Forecast::class,
-            ForecastDay::class
+            ForecastDay::class,
+            LocationQuery::class
         ],
         version = 1
 )

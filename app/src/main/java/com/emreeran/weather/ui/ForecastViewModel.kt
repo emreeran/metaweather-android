@@ -31,8 +31,8 @@ class ForecastViewModel @Inject constructor(
 
     val forecast: LiveData<Resource<ForecastWithItems>> = Transformations
             .switchMap(location) {
-                it.data?.let {
-                    forecastRepository.getForecastByLocationId(it.woeId)
+                it.data?.let { location ->
+                    forecastRepository.getForecastByLocationId(location.woeId)
                 }
             }
 

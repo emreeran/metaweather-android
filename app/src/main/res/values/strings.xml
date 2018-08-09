@@ -13,4 +13,5 @@
     <string name="visibility_title">Visibility</string>
     <string name="min_temp">Min Temp</string>
     <string name="max_temp">Max Temp</string>
+    <string name="search_location">Search Location</string>
 </resources>

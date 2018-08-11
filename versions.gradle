@@ -37,7 +37,7 @@ versions.room = "2.0.0-alpha1"
 versions.lifecycle = "2.0.0-beta01"
 
 // Navigation
-versions.navigation = "1.0.0-alpha03"
+versions.navigation = "1.0.0-alpha04"
 
 // Paging
 versions.paging = "1.0.1"

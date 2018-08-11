@@ -20,12 +20,16 @@ class ForecastViewModel @Inject constructor(
         forecastRepository: ForecastRepository
 ) : ViewModel() {
 
-    private val userCoordinates: MutableLiveData<UserCoordinates> = MutableLiveData()
+    private val locationInfo: MutableLiveData<LocationInfo> = MutableLiveData()
 
     val location: LiveData<Resource<Location>> = Transformations
-            .switchMap(userCoordinates) {
-                it.ifExists { lat, long ->
-                    locationRepository.findNearestLocationByCoordinates(lat, long)
+            .switchMap(locationInfo) {
+                if (it.lat != null && it.long != null) {
+                    locationRepository.findNearestLocationByCoordinates(it.lat, it.long)
+                } else if (it.id != null) {
+                    locationRepository.findLocationById(it.id)
+                } else {
+                    AbsentLiveData.create()
                 }
             }
 
@@ -37,24 +41,28 @@ class ForecastViewModel @Inject constructor(
             }
 
     fun setUserCoordinates(lat: Double, long: Double) {
-        val update = UserCoordinates(lat, long)
+        val update = LocationInfo(lat, long)
 
-        if (userCoordinates.value == update) {
+        if (locationInfo.value == update) {
             return
         }
 
-        userCoordinates.value = update
+        locationInfo.value = update
     }
 
-    data class UserCoordinates(
-            val lat: Double?,
-            val long: Double?
-    ) {
-        fun <T> ifExists(f: (Double, Double) -> LiveData<T>): LiveData<T> {
-            if (lat != null && long != null) {
-                return f(lat, long)
-            }
-            return AbsentLiveData.create()
+    fun setLocationId(id: Int) {
+        val update = LocationInfo(id = id)
+
+        if (locationInfo.value == update) {
+            return
         }
+
+        locationInfo.value = update
     }
+
+    data class LocationInfo(
+            val lat: Double? = null,
+            val long: Double? = null,
+            val id: Int? = null
+    )
 }

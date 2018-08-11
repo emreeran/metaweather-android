@@ -25,6 +25,16 @@ class LocationRepository @Inject constructor(
         private val locationDao: LocationDao,
         private val weatherService: MetaWeatherService
 ) {
+    fun findLocationById(id: Int): LiveData<Resource<Location>> {
+        val result = MutableLiveData<Resource<Location>>()
+        appExecutors.diskIO().execute {
+            val data = locationDao.findLocationByIdSync(id)
+            result.postValue(Resource.success(data))
+        }
+
+        return result
+    }
+
     fun findNearestLocationByCoordinates(lat: Double, long: Double): LiveData<Resource<Location>> {
         return object : NetworkBoundResource<Location, List<LocationSearchResponse>>(appExecutors) {
 

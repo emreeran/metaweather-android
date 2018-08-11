@@ -27,6 +27,9 @@ abstract class LocationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertAll(locations: List<Location>)
 
+    @Query("SELECT * FROM locations WHERE woeId = :id")
+    abstract fun findLocationByIdSync(id: Int): Location
+
     @Query("SELECT * FROM locations WHERE woeId IN (:ids)")
     abstract fun listLocationsByIds(ids: List<Int>): List<Location>
 

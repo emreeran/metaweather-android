@@ -6,15 +6,14 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation.findNavController
 import com.emreeran.weather.R
 import com.emreeran.weather.databinding.ForecastFragmentBinding
 import com.emreeran.weather.db.entity.ForecastDay
@@ -42,6 +41,11 @@ class ForecastFragment : Fragment(), Injectable {
     var binding by autoCleared<ForecastFragmentBinding>()
 
     private val disposables: CompositeDisposable = CompositeDisposable()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil
@@ -101,6 +105,22 @@ class ForecastFragment : Fragment(), Injectable {
     override fun onDestroy() {
         super.onDestroy()
         disposables.clear()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.forecast_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_search -> {
+                findNavController(binding.root).navigate(R.id.action_forecast_to_search_location)
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     @SuppressLint("MissingPermission")

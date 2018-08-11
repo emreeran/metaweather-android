@@ -1,6 +1,9 @@
 package com.emreeran.weather.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +27,15 @@ class LocationSearchFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    lateinit var locationSearchViewModel: LocationSearchViewModel
+
     var binding by autoCleared<LocationSearchFragmentBinding>()
 
-    lateinit var locationSearchViewModel: LocationSearchViewModel
+    private var searchKeyword = ""
+    private var lastInput: Long = 0
+    private val minimumSearchCharLength = 3
+    private val inputHandler = Handler()
+    private val inputWaitDelay: Long = 1000
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil
@@ -43,5 +52,33 @@ class LocationSearchFragment : Fragment(), Injectable {
         query.observe(this, Observer {
             Timber.i(it.data.toString())
         })
+
+        binding.search.addTextChangedListener(onSearchTextChanged)
+    }
+
+    private val searchIfInputFinished = Runnable {
+        if (System.currentTimeMillis() > (lastInput + inputWaitDelay - 500)) {
+            locationSearchViewModel.setQueryString(searchKeyword)
+        }
+    }
+
+    private val onSearchTextChanged = object : TextWatcher {
+        override fun beforeTextChanged(text: CharSequence?, start: Int, count: Int, after: Int) {
+
+        }
+
+        override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+            inputHandler.removeCallbacks(searchIfInputFinished)
+        }
+
+        override fun afterTextChanged(text: Editable?) {
+            text?.let {
+                if (it.length > minimumSearchCharLength) {
+                    searchKeyword = it.toString()
+                    lastInput = System.currentTimeMillis()
+                    inputHandler.postDelayed(searchIfInputFinished, inputWaitDelay)
+                }
+            }
+        }
     }
 }

@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity(), LifecycleOwner, HasSupportFragmentInje
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        setSupportActionBar(findViewById(R.id.main_toolbar))
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = dispatchingAndroidInjector

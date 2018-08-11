@@ -8,5 +8,18 @@
     <fragment
         android:id="@+id/forecast_fragment"
         android:name="com.emreeran.weather.ui.ForecastFragment"
-        tools:layout="@layout/forecast_fragment" />
+        tools:layout="@layout/forecast_fragment">
+        <action
+            android:id="@+id/action_forecast_to_search_location"
+            app:destination="@id/search_location_fragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/search_location_fragment"
+        android:name="com.emreeran.weather.ui.LocationSearchFragment"
+        tools:layout="@layout/location_search_fragment" />
 </navigation>

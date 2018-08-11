@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/splash_fragment">
+
+    <fragment
+        android:id="@+id/splash_fragment"
+        android:name="com.emreeran.weather.ui.SplashFragment"
+        tools:layout="@layout/splash_fragment">
+        <action
+            android:id="@+id/show_forecast"
+            app:clearTask="true"
+            app:destination="@id/forecast_fragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+
+        <action
+            android:id="@+id/show_search_location"
+            app:clearTask="true"
+            app:destination="@id/search_location_fragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forecast_fragment"
+        android:name="com.emreeran.weather.ui.ForecastFragment"
+        tools:layout="@layout/forecast_fragment">
+        <argument
+            android:name="latitude"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="longitude"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="location_id"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <action
+            android:id="@+id/show_search_location"
+            app:destination="@id/search_location_fragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/search_location_fragment"
+        android:name="com.emreeran.weather.ui.LocationSearchFragment"
+        tools:layout="@layout/location_search_fragment">
+        <action
+            android:id="@+id/show_forecast"
+            app:clearTask="true"
+            app:destination="@id/forecast_fragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+</navigation>

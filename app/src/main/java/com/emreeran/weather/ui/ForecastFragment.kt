@@ -1,29 +1,20 @@
 package com.emreeran.weather.ui
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.*
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.emreeran.weather.MainActivity
 import com.emreeran.weather.R
 import com.emreeran.weather.databinding.ForecastFragmentBinding
 import com.emreeran.weather.db.entity.ForecastDay
 import com.emreeran.weather.di.Injectable
 import com.emreeran.weather.util.autoCleared
-import com.google.android.gms.location.LocationRequest
-import com.patloew.rxlocation.RxLocation
-import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.disposables.CompositeDisposable
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -40,14 +31,13 @@ class ForecastFragment : Fragment(), Injectable {
 
     var binding by autoCleared<ForecastFragmentBinding>()
 
-    private val disposables: CompositeDisposable = CompositeDisposable()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        (activity as MainActivity).supportActionBar?.show()
         binding = DataBindingUtil
                 .inflate(inflater, R.layout.forecast_fragment, container, false)
         return binding.root
@@ -70,44 +60,29 @@ class ForecastFragment : Fragment(), Injectable {
             binding.location = it?.data
         })
 
-
-        forecast.observe(this, Observer {
-            Timber.i("Forecast: ${it?.data}")
-            it?.data?.let {
+        forecast.observe(this, Observer { resource ->
+            resource?.data?.let {
                 binding.forecast = it.forecast
                 setTodayForecast(it.days)
             }
         })
 
-        context?.let {
-            if (ContextCompat.checkSelfPermission(it, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                val rxPermissions = RxPermissions(this)
+        arguments?.let {
+            val args = ForecastFragmentArgs.fromBundle(it)
+            val latitude: Double? = args.latitude?.toDouble()
+            val longitude: Double? = args.longitude?.toDouble()
+            val locationId: Int = args.locationId
 
-                disposables.add(rxPermissions.request(Manifest.permission.ACCESS_FINE_LOCATION)
-                        .subscribe { granted ->
-                            Timber.i("Permission granted: $granted")
-                            if (granted) {
-                                context?.let {
-                                    getUserLocation(it)
-                                }
-
-                            } else {
-                                // TODO: show warning message
-                            }
-                        })
-            } else {
-                getUserLocation(it)
+            if (latitude != null && longitude != null) {
+                forecastViewModel.setUserCoordinates(latitude, longitude)
+            } else if (locationId != -1) {
+                forecastViewModel.setLocationId(locationId)
             }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        disposables.clear()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.clear()
         inflater?.inflate(R.menu.forecast_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -115,23 +90,13 @@ class ForecastFragment : Fragment(), Injectable {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_search -> {
-                findNavController(binding.root).navigate(R.id.action_forecast_to_search_location)
+                findNavController(this)
+                        .navigate(ForecastFragmentDirections.showSearchLocation())
                 return true
             }
             else -> super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getUserLocation(context: Context) {
-        val rxLocation = RxLocation(context)
-        val locationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        disposables.add(rxLocation.location().updates(locationRequest)
-                .subscribe { location ->
-                    forecastViewModel.setUserCoordinates(location.latitude, location.longitude)
-                })
     }
 
     private fun setTodayForecast(forecastDays: List<ForecastDay>) {

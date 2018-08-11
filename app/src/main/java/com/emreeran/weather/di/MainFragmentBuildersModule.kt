@@ -2,6 +2,7 @@ package com.emreeran.weather.di
 
 import com.emreeran.weather.ui.ForecastFragment
 import com.emreeran.weather.ui.LocationSearchFragment
+import com.emreeran.weather.ui.SplashFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -10,6 +11,9 @@ import dagger.android.ContributesAndroidInjector
  */
 @Module
 abstract class MainFragmentBuildersModule {
+    @ContributesAndroidInjector
+    internal abstract fun contributeSplashFragment(): SplashFragment
+
     @ContributesAndroidInjector
     internal abstract fun contributeForecastFragment(): ForecastFragment
 

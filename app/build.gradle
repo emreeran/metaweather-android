@@ -6,7 +6,6 @@ apply plugin: "androidx.navigation.safeargs"
 
 android {
     compileSdkVersion build_versions.target_sdk
-    buildToolsVersion build_versions.build_tools
     defaultConfig {
         applicationId "com.emreeran.weather"
         minSdkVersion build_versions.min_sdk

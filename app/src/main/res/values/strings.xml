@@ -14,4 +14,9 @@
     <string name="min_temp">Min Temp</string>
     <string name="max_temp">Max Temp</string>
     <string name="search_location">Search Location</string>
+
+    <!-- Alert messages-->
+    <string name="location_permission_denied">
+        We cannot determine your location without your permission.
+        You have to manually select a location.</string>
 </resources>

@@ -1,0 +1,13 @@
+def properties = [:]
+
+def sdk = [:]
+sdk.min = 16
+sdk.target = 28
+properties.sdk = sdk
+
+def version = [:]
+version.code = 1
+version.name = '1.0.0'
+properties.version = version
+
+ext.projectProperties = properties

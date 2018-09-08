@@ -1,0 +1,151 @@
+/*
+ * Copyright (C) 2018 Emre Eran
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply from: 'versions.gradle'
+
+def deps = [:]
+
+// Gradle plugin
+deps.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
+
+// Kotlin
+def kotlin = [:]
+kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+kotlin.test = "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
+kotlin.plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+kotlin.allopen = "org.jetbrains.kotlin:kotlin-allopen:$versions.kotlin"
+deps.kotlin = kotlin
+
+// Android support
+def support = [:]
+support.app_compat = "androidx.appcompat:appcompat:$versions.app_compat"
+support.recyclerview = "androidx.recyclerview:recyclerview:$versions.recyclerview"
+support.cardview = "androidx.cardview:cardview:$versions.cardview"
+support.design = "com.google.android.material:material:$versions.design"
+support.annotations = "com.android.support:support-annotations:$versions.support"
+support.v4 = "com.android.support:support-v4:$versions.support"
+support.core_utils = "com.android.support:support-core-utils:$versions.support"
+support.test_runner = "androidx.test:runner:$versions.test_runner"
+support.espresso_core = "androidx.test.espresso:espresso-core:$versions.espresso_core"
+deps.support = support
+
+deps.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+
+// Google Play services
+def play = [:]
+play.location = "com.google.android.gms:play-services-location:$versions.play"
+play.maps = "com.google.android.gms:play-services-maps:$versions.play"
+play.tagmanager = "com.google.android.gms:play-services-tagmanager:$versions.play_tagmanager"
+deps.play = play
+
+// Architecture components
+def arch_core = [:]
+arch_core.testing = "android.arch.core:core-testing:$versions.arch_core"
+deps.arch_core = arch_core
+
+// Room
+def room = [:]
+room.common = "androidx.room:room-common:$versions.room"
+room.runtime = "androidx.room:room-runtime:$versions.room"
+room.compiler = "androidx.room:room-compiler:$versions.room"
+room.rxjava2 = "androidx.room:room-rxjava2:$versions.room"
+room.guava = "androidx.room:room-guava:$versions.room"
+room.migration = "androidx.room:room-migration:$versions.room"
+room.testing = "androidx.room:room-testing:$versions.room"
+deps.room = room
+
+// Lifecycle
+def lifecycle = [:]
+lifecycle.runtime = "androidx.lifecycle:lifecycle-runtime:$versions.lifecycle"
+lifecycle.extensions = "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+lifecycle.java8 = "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle"
+lifecycle.compiler = "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
+deps.lifecycle = lifecycle
+
+// Navigation
+def navigation = [:]
+navigation.runtime = "android.arch.navigation:navigation-runtime:$versions.navigation"
+navigation.runtime_ktx = "android.arch.navigation:navigation-runtime-ktx:$versions.navigation"
+navigation.fragment = "android.arch.navigation:navigation-fragment:$versions.navigation"
+navigation.fragment_ktx = "android.arch.navigation:navigation-fragment-ktx:$versions.navigation"
+navigation.safe_args_plugin = "android.arch.navigation:navigation-safe-args-gradle-plugin:$versions.navigation"
+navigation.testing_ktx = "android.arch.navigation:navigation-testing-ktx:$versions.navigation"
+deps.navigation = navigation
+
+// Paging
+deps.paging = "android.arch.paging:runtime:$versions.paging"
+
+// Dagger
+def dagger = [:]
+dagger.runtime = "com.google.dagger:dagger:$versions.dagger"
+dagger.android = "com.google.dagger:dagger-android:$versions.dagger"
+dagger.android_support = "com.google.dagger:dagger-android-support:$versions.dagger"
+dagger.compiler = "com.google.dagger:dagger-compiler:$versions.dagger"
+dagger.android_support_compiler = "com.google.dagger:dagger-android-processor:$versions.dagger"
+deps.dagger = dagger
+
+// Retrofit
+def retrofit = [:]
+retrofit.runtime = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+retrofit.gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+retrofit.mock = "com.squareup.retrofit2:retrofit-mock:$versions.retrofit"
+retrofit.rx_java = "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:${versions.retrofit_rx_java}"
+deps.retrofit = retrofit
+deps.okhttp_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${versions.okhttp_logging_interceptor}"
+
+// RxJava
+def rx_java2 = [:]
+rx_java2.rx_java = "io.reactivex.rxjava2:rxjava:$versions.rxjava2"
+rx_java2.rx_android = "io.reactivex.rxjava2:rxandroid:$versions.rx_android"
+rx_java2.rx_kotlin = "io.reactivex:rxkotlin:$versions.rx_kotlin"
+deps.rx_java2 = rx_java2
+
+// Timber
+deps.timber = "com.jakewharton.timber:timber:$versions.timber"
+
+// Glide
+def glide = [:]
+glide.runtime = "com.github.bumptech.glide:glide:$versions.glide"
+glide.compiler = "com.github.bumptech.glide:compiler:$versions.glide"
+glide.recyclerview_integration = "com.github.bumptech.glide:recyclerview-integration:$versions.glide"
+deps.glide = glide
+
+// PermissionLiveData
+deps.permission_live_data = "com.emreeran.permissionlivedata:permissionlivedata:$versions.permission_live_data"
+
+// LocationLiveData
+deps.location_live_data = "com.emreeran.locationlivedata:locationlivedata:$versions.location_live_data"
+
+// RxPermissions
+deps.rxpermissions = "com.github.tbruyelle:rxpermissions:$versions.rxpermissions"
+
+// RxLocation
+deps.rxlocation = "com.patloew.rxlocation:rxlocation:$versions.rxlocation"
+
+// JUnit
+deps.junit = "junit:junit:$versions.junit"
+
+ext.deps = deps
+
+static def addRepos(RepositoryHandler handler) {
+    handler.google()
+    handler.mavenCentral()
+    handler.jcenter()
+    handler.maven { url "https://dl.bintray.com/emre/maven" }
+    handler.maven { url 'https://jitpack.io' }  // Used by RxPermissions
+}
+
+ext.addRepos = this.&addRepos

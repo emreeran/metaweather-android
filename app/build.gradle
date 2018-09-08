@@ -3,26 +3,36 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs"
+apply from: rootProject.file('project-properties.gradle')
 
 android {
-    compileSdkVersion build_versions.target_sdk
+    compileSdkVersion projectProperties.sdk.target
     defaultConfig {
         applicationId "com.emreeran.weather"
-        minSdkVersion build_versions.min_sdk
-        targetSdkVersion build_versions.target_sdk
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion projectProperties.sdk.min
+        targetSdkVersion projectProperties.sdk.target
+        versionCode projectProperties.version.code
+        versionName projectProperties.version.name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     dataBinding {
         enabled = true
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -66,18 +76,18 @@ dependencies {
     implementation deps.retrofit.rx_java
     implementation deps.okhttp_logging_interceptor
 
+    // PermissionLiveData
+    implementation deps.permission_live_data
+
+    // LocationLiveData
+    implementation deps.location_live_data
+
     // RxJava2
     implementation deps.rx_java2.rx_java
     implementation deps.rx_java2.rx_android
 
     // Timber
     implementation deps.timber
-
-    // RxPermissions
-    implementation deps.rxpermissions
-
-    // RxLocation
-    implementation deps.rxlocation
 
     // Annotation processors
     // Room

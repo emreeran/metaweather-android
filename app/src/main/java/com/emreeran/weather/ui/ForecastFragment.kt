@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.emreeran.weather.MainActivity
 import com.emreeran.weather.R
 import com.emreeran.weather.databinding.ForecastFragmentBinding
 import com.emreeran.weather.db.entity.ForecastDay
 import com.emreeran.weather.di.Injectable
 import com.emreeran.weather.util.autoCleared
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -22,7 +22,7 @@ import javax.inject.Inject
 /**
  * Created by Emre Eran on 2.08.2018.
  */
-class ForecastFragment : Fragment(), Injectable {
+abstract class ForecastFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -36,7 +36,8 @@ class ForecastFragment : Fragment(), Injectable {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         (activity as MainActivity).supportActionBar?.show()
         binding = DataBindingUtil
                 .inflate(inflater, R.layout.forecast_fragment, container, false)
@@ -61,24 +62,14 @@ class ForecastFragment : Fragment(), Injectable {
         })
 
         forecast.observe(this, Observer { resource ->
+            Timber.d("Forecast resource updated ${resource.data}")
             resource?.data?.let {
                 binding.forecast = it.forecast
                 setTodayForecast(it.days)
             }
         })
 
-        arguments?.let {
-            val args = ForecastFragmentArgs.fromBundle(it)
-            val latitude: Double? = args.latitude?.toDouble()
-            val longitude: Double? = args.longitude?.toDouble()
-            val locationId: Int = args.locationId
-
-            if (latitude != null && longitude != null) {
-                forecastViewModel.setUserCoordinates(latitude, longitude)
-            } else if (locationId != -1) {
-                forecastViewModel.setLocationId(locationId)
-            }
-        }
+        getForecastData()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -90,8 +81,7 @@ class ForecastFragment : Fragment(), Injectable {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_search -> {
-                findNavController(this)
-                        .navigate(ForecastFragmentDirections.showSearchLocation())
+                navigateToSearch()
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -99,11 +89,20 @@ class ForecastFragment : Fragment(), Injectable {
         return super.onOptionsItemSelected(item)
     }
 
+    abstract fun getForecastData()
+
+    abstract fun navigateToSearch()
+
     private fun setTodayForecast(forecastDays: List<ForecastDay>) {
+        if (forecastDays.isEmpty()) return
+
         for (item in forecastDays) {
             if (DateUtils.isToday(item.date.time)) {
                 binding.today = item
+                return
             }
         }
+
+        binding.today = forecastDays[0]
     }
 }

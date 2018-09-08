@@ -80,7 +80,7 @@ class LocationSearchFragment : Fragment(), Injectable {
 
         adapter = LocationAdapter(dataBindingComponent, appExecutors) {
             dismissKeyboard(binding.root.windowToken)
-            val action = LocationSearchFragmentDirections.showForecast(null, null)
+            val action = LocationSearchFragmentDirections.showForecast()
             action.setLocationId(it.woeId)
             findNavController(this).navigate(action)
         }

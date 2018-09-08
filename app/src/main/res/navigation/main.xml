@@ -3,24 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/splash_fragment">
+    app:startDestination="@id/user_location_forecast_fragment">
 
     <fragment
-        android:id="@+id/splash_fragment"
-        android:name="com.emreeran.weather.ui.SplashFragment"
-        tools:layout="@layout/splash_fragment">
-        <action
-            android:id="@+id/show_forecast"
-            app:clearTask="true"
-            app:destination="@id/forecast_fragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
-
+        android:id="@+id/user_location_forecast_fragment"
+        android:name="com.emreeran.weather.ui.UserLocationForecastFragment"
+        tools:layout="@layout/forecast_fragment">
         <action
             android:id="@+id/show_search_location"
-            app:clearTask="true"
             app:destination="@id/search_location_fragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right"
@@ -29,17 +19,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/forecast_fragment"
-        android:name="com.emreeran.weather.ui.ForecastFragment"
+        android:id="@+id/selected_location_forecast_fragment"
+        android:name="com.emreeran.weather.ui.SelectedLocationForecastFragment"
         tools:layout="@layout/forecast_fragment">
-        <argument
-            android:name="latitude"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="longitude"
-            app:argType="string"
-            app:nullable="true" />
         <argument
             android:name="location_id"
             android:defaultValue="-1"
@@ -60,7 +42,7 @@
         <action
             android:id="@+id/show_forecast"
             app:clearTask="true"
-            app:destination="@id/forecast_fragment"
+            app:destination="@id/selected_location_forecast_fragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
